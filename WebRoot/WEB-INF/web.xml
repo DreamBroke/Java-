@@ -10,7 +10,10 @@
     <servlet-name>XmlDownAndReadServlet</servlet-name>
     <servlet-class>yjx.thread.test.XmlDownAndReadServlet</servlet-class>
   </servlet>
-
+  <servlet>
+    <servlet-name>XmlDownAndReadBySAXServlet</servlet-name>
+    <servlet-class>yjx.thread.test.XmlDownAndReadBySAXServlet</servlet-class>
+  </servlet>
 	
 
   <servlet-mapping>
@@ -20,6 +23,10 @@
   <servlet-mapping>
     <servlet-name>XmlDownAndReadServlet</servlet-name>
     <url-pattern>/XmlDownAndReadServlet</url-pattern>
+  </servlet-mapping>
+    <servlet-mapping>
+    <servlet-name>XmlDownAndReadBySAXServlet</servlet-name>
+    <url-pattern>/XmlDownAndReadBySAXServlet</url-pattern>
   </servlet-mapping>
 
 </web-app>

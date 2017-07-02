@@ -9,16 +9,15 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-public class XmlDownAndReadServlet extends HttpServlet {
+import yjx.thread.handler.SAXParserHandler;
+
+public class XmlDownAndReadBySAXServlet extends HttpServlet {
 
 	/**
 	 * 
@@ -28,7 +27,7 @@ public class XmlDownAndReadServlet extends HttpServlet {
 	/**
 	 * Constructor of the object.
 	 */
-	public XmlDownAndReadServlet() {
+	public XmlDownAndReadBySAXServlet() {
 		super();
 	}
 
@@ -64,30 +63,18 @@ public class XmlDownAndReadServlet extends HttpServlet {
 				"http://192.168.0.105:8081/threadTest/source/source.xml",
 				"resource-" + uuid + ".xml",
 				rootPath + "/resource/");
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		SAXParserFactory factory = SAXParserFactory.newInstance();
 		try {
-			DocumentBuilder db = dbf.newDocumentBuilder();
-			Document document = db.parse(rootPath + "/resource/resource-" + uuid + ".xml");
-			NodeList testList = document.getElementsByTagName("test");
-			for (int i = 0; i < testList.getLength(); i++) {
-				Element test = (Element) testList.item(i);
-				String test_id = test.getAttribute("id");
-				if (id != null && id.equals(test_id)) {
-					NodeList childNodes = test.getChildNodes();
-					for (int k = 0; k < childNodes.getLength(); k++) {
-						if ("t".equals(childNodes.item(k).getNodeName())) {
-							result = childNodes.item(k).getTextContent();
-						}
-					}
-				}
-			}
+			SAXParser parser = factory.newSAXParser();
+			SAXParserHandler handler = new SAXParserHandler();
+			handler.setId(id);
+			parser.parse(rootPath + "/resource/resource-" + uuid + ".xml", handler);
+			result = handler.getResult();
 		} catch (ParserConfigurationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SAXException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e){
 			e.printStackTrace();
 		}
 		response.setContentType("text/html; charset=utf-8");
